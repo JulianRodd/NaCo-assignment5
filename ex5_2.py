@@ -2,7 +2,6 @@ import random
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
-
 from utils import plot_proximity_hist, proximity_to_goal, step1_randomly_generate_bit_sequence, step2_copy_x_invert_bits_with_prob, step3_x_m_better_than_x_with_goal
 
 random.seed(42)
@@ -37,13 +36,14 @@ def ex5_2_one_plus_one_genetic_algorithm(n_bits = 10, bit_flip_prob = 0.1, stop_
 
 # EXERCISE 5.2.1
 proximity_hist_5_2_1 = ex5_2_one_plus_one_genetic_algorithm(n_bits = 100, bit_flip_prob = 0.01, stop_iterations = 1500, compare_fitness = True)
-plot_proximity_hist(proximity_hist_5_2_1, n_iterations = 1500, name = "ex5_2_1.png")
+legend_5_2_1 = ["Fitness with comparison"]
+plot_proximity_hist([proximity_hist_5_2_1], n_iterations = 1500, name = "ex5_2_1.png", legend = legend_5_2_1)
 plt.close()
 # EXERCISE 5.2.2
 proximity_hist_5_2_2 = ex5_2_one_plus_one_genetic_algorithm(n_bits = 100, bit_flip_prob = 0.01, stop_iterations = 1500, compare_fitness = False)
-plot_proximity_hist(proximity_hist_5_2_2, n_iterations = 1500, name = "ex5_2_2.png")
+legend_5_2_2 = ["Fitness without comparison"]
+plot_proximity_hist([proximity_hist_5_2_2], n_iterations = 1500, name = "ex5_2_2.png", legend = legend_5_2_2)
 plt.close()
 
 # EXERCISE 5.2.4
-plot_proximity_hist(proximity_hist_5_2_1, n_iterations = 1500, name = "ex5_2_4.png")
-plot_proximity_hist(proximity_hist_5_2_2, n_iterations = 1500, name = "ex5_2_4.png")
+plot_proximity_hist([proximity_hist_5_2_1, proximity_hist_5_2_2], n_iterations = 1500, name = "ex5_2_4.png", legend = ["Fitness with comparison", "Fitness without comparison", "Goal"])

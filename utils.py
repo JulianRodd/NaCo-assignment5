@@ -1,12 +1,14 @@
 import random
 from matplotlib import pyplot as plt
-def plot_proximity_hist(proximity_hist, n_iterations = 1500, name = "proximity_hist.png"):
-    proximity_hist = proximity_hist[:n_iterations]
+def plot_proximity_hist(proximity_hists, n_iterations = 1500, name = "proximity_hist.png", legend = []):
+    for proximity_hist in proximity_hists:
+      proximity_hist = proximity_hist[:n_iterations]
+      plt.plot(proximity_hist)
     plt.title("Fitness over generations")
-    plt.plot(proximity_hist)
     plt.hlines(1, 0, n_iterations, colors='r', linestyles='dashed')
     plt.xlabel("Generation")
     plt.ylabel("Fitness (proximity to goal)")
+    plt.legend(legend)
     plt.savefig(f"images/{name}")
     
     
