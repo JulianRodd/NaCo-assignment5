@@ -1,18 +1,16 @@
 import numpy as np
-from plots import (
+from ex5_4.utils import two_opt
+from utils import (
     plot_fitness_over_generations_reduced,
     plot_tour_with_arrows_and_markers,
-)
-from traveling_salesman_problem import (
-    genesis,
+    create_random_population_set,
     get_all_fitnes,
     mate_population,
     mutate_population,
     progenitor_selection,
 )
-from two_opt import two_opt
 
-n_cities = 20
+n_cities = 6
 n_population = 100
 mutation_rate = 0.3
 n_generations = 1500
@@ -63,7 +61,9 @@ def run_ex_5_4(use_ma):
             f"Experiment {experiment + 1}/{experiment_repeats} using {'MA' if use_ma else 'EA'}"
         )
         print("Creating population set")
-        population_set = genesis(list(cities_dict.keys()), n_population)
+        population_set = create_random_population_set(
+            list(cities_dict.keys()), n_population
+        )
         best_solution = [-1, np.inf, np.array([])]
         fitness_history = []
 
