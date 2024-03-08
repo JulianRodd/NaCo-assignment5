@@ -4,6 +4,7 @@ import time
 from utils import (two_opt, plot_fitness_over_generations_reduced, plot_tour_with_arrows_and_markers,
                    create_random_population_set, get_all_fitnes, mate_population, mutate_population,
                    progenitor_selection)
+import tsplib95
 
 n_cities = 20
 n_population = 30  # Amount of routes in the the population set, the more the better (more likely to find the best solution)
@@ -12,15 +13,28 @@ n_generations = 1500  # The amount of generations the population will go through
 experiment_repeats = 10  # The amount of times the experiment will be repeated
 
 np.random.seed(42)
-import tsplib95
-problem = tsplib95.load('ex5_4/a280.tsp')
-print(problem)
-coordinates_list = [problem.node_coords[i] for i in range(1, n_cities + 1)]
-# with open("ex5_4/file-tsp.txt", "r") as file:
-#     for line in file:
-#         x, y = map(float, line.strip().split())
-#         coordinates_list.append([x, y])
+
+def get_coordinates_tsp_file(file_path):
+  coordinates_list = []
+  with open(file_path, "r") as file:
+    for line in file:
+        x, y = map(float, line.strip().split())
+        coordinates_list.append([x, y])
+  return coordinates_list
         
+def get_coordinates_tsplib95(file_path):
+  problem = tsplib95.load(file_path)
+  coordinates_list = [problem.node_coords[i] for i in range(1, n_cities + 1)]
+  return coordinates_list
+
+# For using file-tsp.txt (dataset 1)
+coordinates_list = get_coordinates_tsp_file("ex5_4/file-tsp.txt")   
+
+# For using tsplib95 (dataset 2)
+#coordinates_list = get_coordinates_tsplib95("ex5_4/a280.tsp")
+
+
+# City names and dictionary
 names_list = np.array(
     [
        str(i) for i in range(1, n_cities + 1)
