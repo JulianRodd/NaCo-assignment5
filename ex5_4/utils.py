@@ -6,7 +6,7 @@ import numpy as np
 def plot_fitness_over_generations_reduced(
     fitness_history, title="Fitness Over Generations", n=10
 ):
-    plt.figure(figsize=(20, 6))
+    plt.figure(figsize=(40, 12))
 
     reduced_fitness_history = fitness_history[::n]
     plt.plot(reduced_fitness_history, marker="o", linestyle="-")
@@ -30,6 +30,7 @@ def plot_tour_with_arrows_and_markers(cities_dict, tour, title="Tour"):
     norm = np.sqrt(u**2 + v**2)
 
     plt.plot(x, y, "o-", mfc="r", zorder=1)
+    
     plt.quiver(
         pos_x,
         pos_y,
@@ -42,7 +43,6 @@ def plot_tour_with_arrows_and_markers(cities_dict, tour, title="Tour"):
     )
 
     plt.plot(x[0], y[0], "go", markersize=10, label="Start")
-    plt.plot(x[-2], y[-2], "rx", markersize=10, label="End")
 
     for i, city in enumerate(tour):
         plt.text(x[i], y[i], city)
@@ -57,10 +57,17 @@ def plot_tour_with_arrows_and_markers(cities_dict, tour, title="Tour"):
 def compute_city_distance_coordinates(a, b):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
 
+city_distance_cache = {}
 
 def compute_city_distance_names(city_a, city_b, cities_dict):
-    return compute_city_distance_coordinates(cities_dict[city_a], cities_dict[city_b])
-
+    sorted_cities = tuple(sorted([city_a, city_b]))
+    # Check if the distance calculation already exists in the cache
+    if sorted_cities in city_distance_cache:
+        return city_distance_cache[sorted_cities]
+    
+    distance = compute_city_distance_coordinates(cities_dict[city_a], cities_dict[city_b])
+    city_distance_cache[sorted_cities] = distance
+    return distance
 
 def create_random_population_set(city_list, n_population):
     population_set = []
@@ -150,14 +157,25 @@ def mutate_population(new_population_set, mutation_rate, n_cities):
 def two_opt(tour, cities_dict, n_cities):
     improvement = True
     tour = list(tour)
+    fitness_cache = {}
+
+    def fitness_eval_cached(tour):
+        tour_tuple = tuple(tour)
+        if tour_tuple in fitness_cache:
+            return fitness_cache[tour_tuple]
+        fitness = fitness_eval(tour, cities_dict, n_cities) # Assume this function exists and calculates total distance
+        fitness_cache[tour_tuple] = fitness
+        return fitness
+
     while improvement:
         improvement = False
         for i in range(1, len(tour) - 1):
             for j in range(i + 1, len(tour)):
-                new_tour = tour[:i] + list(reversed(tour[i : j + 1])) + tour[j + 1 :]
-                if fitness_eval(new_tour, cities_dict, n_cities) < fitness_eval(
-                    tour, cities_dict, n_cities
-                ):
+                new_tour = tour[:i] + list(reversed(tour[i:j + 1])) + tour[j + 1:]
+                if fitness_eval_cached(new_tour) < fitness_eval_cached(tour):
                     tour = new_tour
                     improvement = True
+                    break  # Break out of the inner loop once an improvement is found
+            if improvement:  # Break out of the outer loop to restart the process after an improvement
+                break
     return tour
