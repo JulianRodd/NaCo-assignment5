@@ -109,8 +109,6 @@ def mutate_population(new_population_set):
         mutated_pop.append(mutate_offspring(offspring))
     return mutated_pop
   
-  
-
 # Everything put together
 best_solution = [-1,np.inf,np.array([])]
 for i in range(100000):

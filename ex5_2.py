@@ -39,6 +39,7 @@ def ex5_2_one_plus_one_genetic_algorithm(n_bits = 10, bit_flip_prob = 0.1, stop_
 proximity_hist_5_2_1 = ex5_2_one_plus_one_genetic_algorithm(n_bits = 100, bit_flip_prob = 0.01, stop_iterations = 1500, compare_fitness = True)
 plot_proximity_hist(proximity_hist_5_2_1, n_iterations = 1500, name = "ex5_2_1.png")
 plt.close()
+
 # EXERCISE 5.2.2
 proximity_hist_5_2_2 = ex5_2_one_plus_one_genetic_algorithm(n_bits = 100, bit_flip_prob = 0.01, stop_iterations = 1500, compare_fitness = False)
 plot_proximity_hist(proximity_hist_5_2_2, n_iterations = 1500, name = "ex5_2_2.png")
