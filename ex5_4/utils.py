@@ -30,7 +30,7 @@ def plot_tour_with_arrows_and_markers(cities_dict, tour, title="Tour"):
     norm = np.sqrt(u**2 + v**2)
 
     plt.plot(x, y, "o-", mfc="r", zorder=1)
-    
+
     plt.quiver(
         pos_x,
         pos_y,
@@ -57,17 +57,22 @@ def plot_tour_with_arrows_and_markers(cities_dict, tour, title="Tour"):
 def compute_city_distance_coordinates(a, b):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
 
+
 city_distance_cache = {}
+
 
 def compute_city_distance_names(city_a, city_b, cities_dict):
     sorted_cities = tuple(sorted([city_a, city_b]))
-    
+
     if sorted_cities in city_distance_cache:
         return city_distance_cache[sorted_cities]
-    
-    distance = compute_city_distance_coordinates(cities_dict[city_a], cities_dict[city_b])
+
+    distance = compute_city_distance_coordinates(
+        cities_dict[city_a], cities_dict[city_b]
+    )
     city_distance_cache[sorted_cities] = distance
     return distance
+
 
 def create_random_population_set(city_list, n_population):
     population_set = []
@@ -163,7 +168,9 @@ def two_opt(tour, cities_dict, n_cities):
         tour_tuple = tuple(tour)
         if tour_tuple in fitness_cache:
             return fitness_cache[tour_tuple]
-        fitness = fitness_eval(tour, cities_dict, n_cities) # Assume this function exists and calculates total distance
+        fitness = fitness_eval(
+            tour, cities_dict, n_cities
+        )  # Assume this function exists and calculates total distance
         fitness_cache[tour_tuple] = fitness
         return fitness
 
@@ -171,11 +178,13 @@ def two_opt(tour, cities_dict, n_cities):
         improvement = False
         for i in range(1, len(tour) - 1):
             for j in range(i + 1, len(tour)):
-                new_tour = tour[:i] + list(reversed(tour[i:j + 1])) + tour[j + 1:]
+                new_tour = tour[:i] + list(reversed(tour[i : j + 1])) + tour[j + 1 :]
                 if fitness_eval_cached(new_tour) < fitness_eval_cached(tour):
                     tour = new_tour
                     improvement = True
                     break  # Break out of the inner loop once an improvement is found
-            if improvement:  # Break out of the outer loop to restart the process after an improvement
+            if (
+                improvement
+            ):  # Break out of the outer loop to restart the process after an improvement
                 break
     return tour
