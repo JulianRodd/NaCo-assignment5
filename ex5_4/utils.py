@@ -61,7 +61,7 @@ city_distance_cache = {}
 
 def compute_city_distance_names(city_a, city_b, cities_dict):
     sorted_cities = tuple(sorted([city_a, city_b]))
-    # Check if the distance calculation already exists in the cache
+    
     if sorted_cities in city_distance_cache:
         return city_distance_cache[sorted_cities]
     
